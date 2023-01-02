@@ -17,10 +17,10 @@ export class BusquedaComponent {
       return
     }
 
-
     this.gifsService.buscarGifs(valor)
-
     this.txtBuscar.nativeElement.value = ' '
+
+    console.log(valor)
   }
 
 }
