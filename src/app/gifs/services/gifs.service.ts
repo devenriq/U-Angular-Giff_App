@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SearchGifsResponse, Gif } from '../interface/gifs';
 
@@ -8,6 +8,7 @@ import { SearchGifsResponse, Gif } from '../interface/gifs';
 export class GifsService {
   // Esta es la key de mi cuenta de Giphy
   private apiKey: string= 'IIYlL3sOlKdXnziZ3RH2xKRf7cm4wRwF'
+  private servicioUrl: string= 'https://api.giphy.com/v1/gifs'
 
   // Inicializamos una variable privada que contiene un array de strings. Se hizo privada para que solo sea accesible desde este espacio
   private _historial: string[]=[]
@@ -52,8 +53,15 @@ export class GifsService {
       localStorage.setItem('resultados',JSON.stringify(this.resultados))
     }
 
+    const params = new HttpParams()
+      .set('api_key',this.apiKey)
+      .set('limit','10')
+      .set('q', query);
+
+      console.log(params.toString())
+
     // Se hace la petición de la información a la API con este nuevo método .http; parecido a fetch
-    this.http.get<SearchGifsResponse>(`https://api.giphy.com/v1/gifs/search?api_key=IIYlL3sOlKdXnziZ3RH2xKRf7cm4wRwF&q=${query}&limit=10`)
+    this.http.get<SearchGifsResponse>(`${this.servicioUrl}/search`, {params:params})
       .subscribe((res)=>{
         console.log(res.data)
         this.resultados=res.data
